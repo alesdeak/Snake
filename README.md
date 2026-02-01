@@ -16,6 +16,26 @@ Classic Snake game implemented in Java.
 
 
 
+\## How to Play
+
+
+
+\- Use the \*\*arrow keys\*\* to control the snake:
+
+&nbsp; - \*\*Up\*\* → move up  
+
+&nbsp; - \*\*Down\*\* → move down  
+
+&nbsp; - \*\*Left\*\* → move left  
+
+&nbsp; - \*\*Right\*\* → move right
+
+\- Eat the red food blocks to grow.
+
+\- Avoid colliding with the walls or the snake’s own body.
+
+
+
 \## Features
 
 
