@@ -4,14 +4,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Game implements KeyListener {
-    Snake snake = new Snake(1, Direction.EAST);
+    Snake snake = new Snake(Direction.EAST);
     SnakeFood snakeFood = new SnakeFood();
     boolean gameOver = false;
     MyDrawPanel panel = new MyDrawPanel();
     Timer gameTimer;
 
 
-    public static void main(String[] args) {
+   public static void main(String[] args) {
         Game game = new Game();
         game.go();
     }
@@ -22,19 +22,19 @@ public class Game implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_LEFT && snake.getDirection() != Direction.EAST) {
             snake.setDirection(Direction.WEST);}
         else if (e.getKeyCode() == KeyEvent.VK_RIGHT && snake.getDirection() != Direction.WEST) {
             snake.setDirection(Direction.EAST);}
-            else if (e.getKeyCode() == KeyEvent.VK_UP && snake.getDirection() != Direction.SOUTH) {
-                snake.setDirection(Direction.NORTH);}
-                else  if (e.getKeyCode() == KeyEvent.VK_DOWN && snake.getDirection() != Direction.NORTH) {
-                    snake.setDirection(Direction.SOUTH);
-                }
+        else if (e.getKeyCode() == KeyEvent.VK_UP && snake.getDirection() != Direction.SOUTH) {
+            snake.setDirection(Direction.NORTH);}
+        else  if (e.getKeyCode() == KeyEvent.VK_DOWN && snake.getDirection() != Direction.NORTH) {
+            snake.setDirection(Direction.SOUTH);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
             }
 
     class MyDrawPanel extends JPanel {
@@ -43,33 +43,31 @@ public class Game implements KeyListener {
             super.paintComponent(g);
             g.setColor(Color.WHITE);
             g.fillRect(0,0,getWidth(),getHeight());
-            g.setColor(Color.BLACK);
-            g.fillRect(snake.body.getFirst().x, snake.body.getFirst().y, 10, 10);
             g.setColor(Color.RED);
-            g.fillRect(snakeFood.getPositionX(), snakeFood.getPositionY(), 10, 10);
+            g.fillRect(snakeFood.getX(), snakeFood.getY(), 10, 10);
             g.setColor(Color.BLACK);
-            for ( Coordinate element : snake.body){
-                g.fillRect(element.x, element.y, 10, 10);
+            for ( Coordinate element : snake.getBody()){
+                g.fillRect(element.getX(), element.getY(), 10, 10);
             }
         }
     }
 
     public Boolean isEating(){
-        return Math.abs(snake.body.getFirst().x - snakeFood.getPositionX()) < 10 &&
-                Math.abs(snake.body.getFirst().y - snakeFood.getPositionY()) < 10;
+        return Math.abs(snake.getBody().getFirst().getX() - snakeFood.getX()) < 10 &&
+                Math.abs(snake.getBody().getFirst().getY() - snakeFood.getY()) < 10;
     }
 
 public void isCollision() {
-    int x = snake.body.getFirst().x;
-    int y = snake.body.getFirst().y;
+    int x = snake.getBody().getFirst().getX();
+    int y = snake.getBody().getFirst().getY();
 
     if (x < 0 || x > panel.getWidth() - 10 ||
             y < 0 || y > panel.getHeight() - 10) {
         gameOver = true;
     }
 
-    for (int j = snake.body.size() - 1; j > 1; j--) {
-        if (snake.body.getFirst().x == snake.body.get(j).x && snake.body.getFirst().y == snake.body.get(j).y) {
+    for (int j = snake.getBody().size() - 1; j > 1; j--) {
+        if (snake.getBody().getFirst().getX() == snake.getBody().get(j).getX() && snake.getBody().getFirst().getY() == snake.getBody().get(j).getY()) {
             gameOver = true;
             break;
         }
@@ -77,26 +75,26 @@ public void isCollision() {
 }
 
     private boolean foodOnSnake(int x, int y) {
-        for (Coordinate part : snake.body) {
-            if (part.x == x && part.y == y) {
-                return true;   // food would spawn inside the snake
+        for (Coordinate part : snake.getBody()) {
+            if (part.getX() == x && part.getY() == y) {
+                return true;
             }
         }
         return false;
     }
 
     private void resetGame() {
-        snake = new Snake(1, Direction.EAST);      // new snake
-        snakeFood = new SnakeFood();              // new food
-        gameOver = false;                          // reset flag
-                                  // reset score
+        snake = new Snake(Direction.EAST);
+        snakeFood = new SnakeFood();
+        gameOver = false;
 
-        // Make sure the new food is not on the snake
-        while (foodOnSnake(snakeFood.getPositionX(), snakeFood.getPositionY())) {
+
+
+        while (foodOnSnake(snakeFood.getX(), snakeFood.getY())) {
             snakeFood = new SnakeFood();
         }
 
-        panel.repaint();                           // redraw initial state
+        panel.repaint();
     }
 
     public void go() {
@@ -112,7 +110,7 @@ public void isCollision() {
                 gameTimer.stop();
                 JOptionPane.showMessageDialog(
                         null,
-                        "Game Over! You ate " + (snake.getSize() - 1) + " foods.",
+                        "Game Over! You ate " + (snake.getBody().size() - 1) + " foods.",
                         "Snake Score",
                         JOptionPane.INFORMATION_MESSAGE
                 );
@@ -128,8 +126,8 @@ public void isCollision() {
                 do {
                     snakeFood = new SnakeFood();
                 } while (foodOnSnake(
-                        snakeFood.getPositionX(),
-                        snakeFood.getPositionY()
+                        snakeFood.getX(),
+                        snakeFood.getY()
                 ));
             }
             panel.repaint();
