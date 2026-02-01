@@ -39,7 +39,7 @@ public Snake(Direction direction) {
         }
 
         // Move head
-        Coordinate head = body.get(0);
+        Coordinate head = body.getFirst();
         switch (snakeDirection) {
             case EAST -> head.setX(head.getX() + 10);
             case WEST -> head.setX(head.getX() - 10);
