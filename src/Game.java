@@ -22,16 +22,14 @@ public class Game implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_LEFT && snake.getDirection() != Direction.EAST) {
-            snake.setDirection(Direction.WEST);}
-        else if (e.getKeyCode() == KeyEvent.VK_RIGHT && snake.getDirection() != Direction.WEST) {
-            snake.setDirection(Direction.EAST);}
-        else if (e.getKeyCode() == KeyEvent.VK_UP && snake.getDirection() != Direction.SOUTH) {
-            snake.setDirection(Direction.NORTH);}
-        else  if (e.getKeyCode() == KeyEvent.VK_DOWN && snake.getDirection() != Direction.NORTH) {
-            snake.setDirection(Direction.SOUTH);
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_LEFT  -> snake.requestDirection(Direction.WEST);
+            case KeyEvent.VK_RIGHT -> snake.requestDirection(Direction.EAST);
+            case KeyEvent.VK_UP    -> snake.requestDirection(Direction.NORTH);
+            case KeyEvent.VK_DOWN  -> snake.requestDirection(Direction.SOUTH);
         }
     }
+
 
     @Override
     public void keyReleased(KeyEvent e) {

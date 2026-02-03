@@ -4,24 +4,30 @@ import java.util.List;
 
 public class Snake {
 
-private Direction snakeDirection;
+private Direction currentDirection;
+private Direction nextDirection;
 private final ArrayList<Coordinate> body = new ArrayList<>();
 
 public Snake(Direction direction) {
     Coordinate firstCoordinate = new Coordinate(200, 150);
     body.add(firstCoordinate);
-    this.snakeDirection = direction;
-}
-    public Direction getDirection() {
-    return snakeDirection;
-    }
+    this.currentDirection = direction;
+    this.nextDirection = direction;
 
-    public void setDirection(Direction snakeDirection) {
-    this.snakeDirection = snakeDirection;
-    }
+}
 
     public List<Coordinate> getBody() {
         return Collections.unmodifiableList(body);
+    }
+
+    public void requestDirection(Direction newDir) {
+        // block 180 turns based on ACTUAL movement direction
+        if (currentDirection == Direction.WEST && newDir == Direction.EAST) return;
+        if (currentDirection == Direction.EAST && newDir == Direction.WEST) return;
+        if (currentDirection == Direction.NORTH && newDir == Direction.SOUTH) return;
+        if (currentDirection == Direction.SOUTH && newDir == Direction.NORTH) return;
+
+        nextDirection = newDir;
     }
 
     public void grow(){
@@ -30,6 +36,7 @@ public Snake(Direction direction) {
     }
 
     public void move() {
+        currentDirection = nextDirection;
         // Move body segments
         for (int i = body.size() - 1; i > 0; i--) {
             Coordinate prev = body.get(i - 1);
@@ -40,7 +47,7 @@ public Snake(Direction direction) {
 
         // Move head
         Coordinate head = body.getFirst();
-        switch (snakeDirection) {
+        switch (currentDirection) {
             case EAST -> head.setX(head.getX() + 10);
             case WEST -> head.setX(head.getX() - 10);
             case SOUTH -> head.setY(head.getY() + 10);
