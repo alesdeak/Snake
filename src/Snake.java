@@ -21,7 +21,7 @@ public Snake(Direction direction) {
     }
 
     public void requestDirection(Direction newDir) {
-        // block 180 turns based on ACTUAL movement direction
+        // block 180 turns
         if (currentDirection == Direction.WEST && newDir == Direction.EAST) return;
         if (currentDirection == Direction.EAST && newDir == Direction.WEST) return;
         if (currentDirection == Direction.NORTH && newDir == Direction.SOUTH) return;
